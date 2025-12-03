@@ -1,6 +1,11 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Route;
+
+use App\Exports\MasterItemsExport;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -31,3 +36,15 @@ Route::get('/master-items/delete/{id}', [App\Http\Controllers\MasterItemsControl
 
 
 Route::get('/master-items/update-random-data', [App\Http\Controllers\MasterItemsController::class, 'updateRandomData']);
+
+// category routes
+Route::resource('category', CategoryController::class);
+
+// untk cetak pdf
+// routes/web.php
+Route::get('category/{id}/pdf', [CategoryController::class, 'exportPdf'])->name('category.pdf');
+
+
+Route::get('master-items/export/excel', function () {
+    return Excel::download(new MasterItemsExport, 'master_items.xlsx');
+})->name('master-items.export');
